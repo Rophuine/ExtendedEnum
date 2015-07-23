@@ -6,10 +6,13 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace ExtendedEnum
 {
     [Serializable]
+    [JsonConverter(typeof(ExtendedEnumNewtonsoftConverter))]
     public abstract class ExtendedEnumeration : ISerializable, IComparable
     { 
         // Based on http://lostechies.com/jimmybogard/2008/08/12/enumeration-classes/ - See that page for some neat usage examples
@@ -141,6 +144,25 @@ namespace ExtendedEnum
                 }
             }
             return base.ConvertFrom(context, culture, value);
+        }
+    }
+
+    public class ExtendedEnumNewtonsoftConverter : JsonConverter
+    {
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            writer.WriteValue(((ExtendedEnumeration)value).Value);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            var value = Convert.ToInt32(reader.Value);
+            return ExtendedEnumeration.FromValue(objectType, (int) value);
+        }
+
+        public override bool CanConvert(Type objectType)
+        {
+            return typeof (ExtendedEnumeration).IsAssignableFrom(objectType);
         }
     }
 }

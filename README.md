@@ -18,6 +18,9 @@ private class DataAsCode : ExtendedEnumeration
 }
 ```
 
+## Get it!
+install-package ExtendedEnum
+
 ## Use it like this!
 
 ```C#

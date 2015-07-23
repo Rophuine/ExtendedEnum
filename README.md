@@ -37,7 +37,8 @@ foreach (var entry in allEntries)
 	var type = entry.GetType();
 	var info = type.GetMember(entry.ToString());
 	var attribute = info[0].GetCustomAttributes(typeof(DescriptionAttribute), false);
-	return (attributes.Length > 0) ? (DescriptionAttribute)attributes[0] : null;
+	var desc = (attributes.Length > 0) ? (DescriptionAttribute)attributes[0] : null;
+	// ...
 }
 ```
 
@@ -68,7 +69,9 @@ public class Something : ExtendedEnumeration
 
 ## Newtonsoft-friendly
 Use Newtonsoft.Json? It should just work - but you need to tell it which type to deserialize to.
+```C#
 var result = JsonConvert.DeserializeObject<Something>(passedInJson);
+```
 
 ## Preserves strict reference equality
 Well, within an app domain, anyway.

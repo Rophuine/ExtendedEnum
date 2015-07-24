@@ -49,7 +49,7 @@ foreach (var entry in allEntries)
 This isn't a real enum. You need to follow the pattern up above - public readonly members, constructor initializer, static readonly members as your values.
 
 ## Serializable
-Need it to (de)serialize nicely using WebApi? If you're using a real (de)serializer, you need to add some boilerplate (sorry). Your class needs to be marked serializable, and to add a constructor (yes, it just throws an exception):
+Need it to (de)serialize nicely? If you're using a real (de)serializer, you need to add some boilerplate (sorry). Your class needs to be marked serializable, and to add a constructor (yes, it just throws an exception):
 ```C#
 [Serializable]
 public class Something : ExtendedEnumeration
@@ -67,6 +67,17 @@ public class Something : ExtendedEnumeration
     {
         throw new NotImplementedException();             
     }
+}
+```
+
+## WebApi-friendly
+Want to pass one in a URL parameter? There's a type converter ready to use! Just add the right attribute
+```C#
+[Serializable]
+[TypeConverter(typeof(ExtendedEnumTypeConverter<Something>))]
+public class Something : ExtendedEnumeration
+{
+    //...
 }
 ```
 
